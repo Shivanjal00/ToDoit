@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -26,6 +27,11 @@ android {
             )
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -45,4 +51,20 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    implementation(libs.androidx.room.runtime.v230)
+    kapt(libs.room.compiler)
+    implementation(libs.androidx.room.ktx.v230)
+    androidTestImplementation(libs.androidx.room.testing)
+
+/*     implementation(libs.androidx.lifecycle.extensions.z)
+     implementation(libs.androidx.lifecycle.common.java8)
+     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+     implementation(libs.androidx.activity.ktx)
+
+     implementation(libs.kotlinx.coroutines.android)
+     implementation(libs.kotlinx.coroutines.core)*/
 }
