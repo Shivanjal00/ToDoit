@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/homeFragment2"
         android:name="com.example.todoit.ui.Fragments.HomeFragment"
-        android:label="fragment_home"
+        android:label="Your Notes"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment2_to_createNotesFragment2"
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/createNotesFragment2"
         android:name="com.example.todoit.ui.Fragments.CreateNotesFragment"
-        android:label="fragment_create_notes"
+        android:label="Create Your Note"
         tools:layout="@layout/fragment_create_notes" >
         <action
             android:id="@+id/action_createNotesFragment2_to_homeFragment22"
@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/editNotesFragment2"
         android:name="com.example.todoit.ui.Fragments.EditNotesFragment"
-        android:label="fragment_edit_notes"
+        android:label="Add A New Note"
         tools:layout="@layout/fragment_edit_notes" >
         <action
             android:id="@+id/action_editNotesFragment2_to_homeFragment22"

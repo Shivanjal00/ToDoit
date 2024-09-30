@@ -60,11 +60,11 @@ dependencies {
     implementation(libs.androidx.room.ktx.v230)
     androidTestImplementation(libs.androidx.room.testing)
 
-/*     implementation(libs.androidx.lifecycle.extensions.z)
-     implementation(libs.androidx.lifecycle.common.java8)
-     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-     implementation(libs.androidx.activity.ktx)
+//     implementation(libs.androidx.lifecycle.extensions.z)
+//     implementation(libs.androidx.lifecycle.common.java8)
+       implementation(libs.androidx.lifecycle.viewmodel.ktx)
+//     implementation(libs.androidx.activity.ktx)
 
-     implementation(libs.kotlinx.coroutines.android)
+/*     implementation(libs.kotlinx.coroutines.android)
      implementation(libs.kotlinx.coroutines.core)*/
 }
