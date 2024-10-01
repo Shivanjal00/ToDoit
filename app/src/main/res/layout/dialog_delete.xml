@@ -16,10 +16,12 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Are you sure you want to delete\n This Note ?"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/dialog_yes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -30,9 +32,11 @@
         android:textStyle="bold"
         android:padding="10dp"
         android:background="@drawable/yes_btn"
+        android:textColor="@color/black"
         android:text="Yes" />
 
     <TextView
+        android:id="@+id/dialog_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -40,9 +44,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:textStyle="bold"
         android:padding="10dp"
         android:background="@drawable/no_btn"
+        android:textColor="@color/black"
         android:text="No" />
 
 

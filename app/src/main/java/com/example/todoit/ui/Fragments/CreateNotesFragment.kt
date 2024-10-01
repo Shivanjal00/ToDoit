@@ -51,7 +51,7 @@ class CreateNotesFragment : Fragment() {
         binding.pRed.setOnClickListener {
             priority = "3"
             binding.pRed.setImageResource(R.drawable.baseline_done_24)
-            binding.pGreen.setImageResource(0)
+            binding.pyellow.setImageResource(0)
             binding.pGreen.setImageResource(0)
 
         }

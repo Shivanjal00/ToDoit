@@ -28,10 +28,13 @@
     <fragment
         android:id="@+id/editNotesFragment2"
         android:name="com.example.todoit.ui.Fragments.EditNotesFragment"
-        android:label="Add A New Note"
+        android:label="Edit Your Note"
         tools:layout="@layout/fragment_edit_notes" >
         <action
             android:id="@+id/action_editNotesFragment2_to_homeFragment22"
             app:destination="@id/homeFragment2" />
+        <argument
+            android:name="data"
+            app:argType="com.example.todoit.Model.Notes" />
     </fragment>
 </navigation>

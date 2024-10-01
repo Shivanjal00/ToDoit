@@ -44,8 +44,9 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/pRed"
-                android:background="@drawable/red"/>
+                android:layout_marginStart="5dp"
+                android:id="@+id/pGreen"
+                android:background="@drawable/green"/>
 
             <ImageView
                 android:layout_width="25dp"
@@ -54,12 +55,13 @@
                 android:id="@+id/pYellow"
                 android:background="@drawable/yellow"/>
 
+
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:id="@+id/pRed"
                 android:layout_marginStart="20dp"
-                android:id="@+id/pGreen"
-                android:background="@drawable/green"/>
+                android:background="@drawable/red"/>
 
 
         </LinearLayout>
