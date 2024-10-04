@@ -1,5 +1,7 @@
 [versions]
 agp = "8.5.0"
+firebaseBom = "33.4.0"
+firebaseMessaging = "24.0.2"
 gradle = "7.0.4"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -20,6 +22,7 @@ roomCompiler = "2.3.0"
 roomKtx = "2.3.0"
 roomRuntime = "2.6.1"
 roomRuntimeVersion = "2.3.0"
+googleGmsGoogleServices = "4.4.2"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -36,6 +39,9 @@ androidx-room-ktx-v230 = { module = "androidx.room:room-ktx", version.ref = "roo
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-runtime-v230 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomRuntime" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 jetbrains-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePluginVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -53,4 +59,5 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRun
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

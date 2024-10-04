@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.gms.google-services")
 }
 
 
@@ -71,4 +72,8 @@ dependencies {
 
 /*     implementation(libs.kotlinx.coroutines.android)
      implementation(libs.kotlinx.coroutines.core)*/
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation (libs.firebase.messaging)
 }

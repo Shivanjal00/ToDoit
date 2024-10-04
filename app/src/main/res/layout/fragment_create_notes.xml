@@ -80,6 +80,47 @@
             android:textColorHint="#D1D1D1" />
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+
+            <EditText
+                android:id="@+id/editDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_txt_shap"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="Select Date"
+                android:maxLines="1"
+                android:padding="15dp"
+                android:textColorHint="#D1D1D1" />
+
+            <EditText
+                android:id="@+id/editTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_txt_shap"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="Select Time"
+                android:maxLines="1"
+                android:padding="15dp"
+                android:textColorHint="#D1D1D1" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
