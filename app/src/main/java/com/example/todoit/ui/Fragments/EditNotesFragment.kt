@@ -1,7 +1,8 @@
 package com.example.todoit.ui.Fragments
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -17,7 +18,7 @@ import com.example.todoit.R
 import com.example.todoit.ViewModel.NotesViewModel
 import com.example.todoit.databinding.FragmentEditNotesBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.util.Date
+import java.util.*
 
 class EditNotesFragment : Fragment() {
 
@@ -55,26 +56,22 @@ class EditNotesFragment : Fragment() {
         binding.edtTitle.setText(oldNotes.data.title)
         binding.edtSubtitle.setText(oldNotes.data.subTitle)
         binding.edtNotes.setText(oldNotes.data.notes)
+        binding.edtDate.setText(oldNotes.data.date)  // Populate the date field
+        binding.edtTime.setText(oldNotes.data.time)  // Populate the time field
 
         // Set priority according to the existing data
         when (oldNotes.data.priority) {
             "1" -> {
                 priority = "1"
                 binding.pGreen.setImageResource(R.drawable.baseline_done_24)
-                binding.pRed.setImageResource(0)
-                binding.pYellow.setImageResource(0)
             }
             "2" -> {
                 priority = "2"
                 binding.pYellow.setImageResource(R.drawable.baseline_done_24)
-                binding.pRed.setImageResource(0)
-                binding.pGreen.setImageResource(0)
             }
             "3" -> {
                 priority = "3"
                 binding.pRed.setImageResource(R.drawable.baseline_done_24)
-                binding.pYellow.setImageResource(0)
-                binding.pGreen.setImageResource(0)
             }
         }
 
@@ -98,6 +95,10 @@ class EditNotesFragment : Fragment() {
             binding.pGreen.setImageResource(0)
         }
 
+        // Date and time picker listeners
+        binding.edtDate.setOnClickListener { openDatePicker() }
+        binding.edtTime.setOnClickListener { openTimePicker() }
+
         // Save updated note
         binding.btnEditSaveNotes.setOnClickListener {
             updateNotes(it)
@@ -106,20 +107,48 @@ class EditNotesFragment : Fragment() {
         return binding.root
     }
 
+    private fun openDatePicker() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"  // Format: DD/MM/YYYY
+            binding.edtDate.setText(date)
+        }, year, month, day)
+
+        datePickerDialog.show()
+    }
+
+    private fun openTimePicker() {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
+            val time = String.format("%02d:%02d", selectedHour, selectedMinute) // Format: HH:mm
+            binding.edtTime.setText(time)
+        }, hour, minute, true)
+
+        timePickerDialog.show()
+    }
+
     private fun updateNotes(view: View) {
         val title = binding.edtTitle.text.toString()
         val subTitle = binding.edtSubtitle.text.toString()
         val notes = binding.edtNotes.text.toString()
+        val date = binding.edtDate.text.toString() // Get the date from the EditText
+        val time = binding.edtTime.text.toString() // Get the time from the EditText
 
-        val d = Date()
-        val notesDate: CharSequence = DateFormat.format("MMMM d, yyyy ", d.time)
-
+        // Create updated note object
         val updatedNote = Notes(
             oldNotes.data.id,
             title = title,
             subTitle = subTitle,
             notes = notes,
-            date = notesDate.toString(),
+            date = date, // Save the date
+            time = time, // Save the time
             priority
         )
 

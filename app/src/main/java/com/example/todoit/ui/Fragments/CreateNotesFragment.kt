@@ -195,14 +195,18 @@ class CreateNotesFragment : Fragment() {
         val d = Date()
         val notesDate: CharSequence = DateFormat.format("MMMM d, yyyy", d.time)
 
-        // Create the Notes object with the new 'time' field
+        // Format the selected time
+        val selectedTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
+
+        // Create the Notes object with the new date and time fields
         val data = Notes(
             null,
             title = title,
             subTitle = subTitle,
             notes = notes,
             date = notesDate.toString(),
-            priority = priority,
+            time = selectedTime, // Save the selected time here
+            priority = priority
         )
 
         // Add notes to the ViewModel
@@ -214,5 +218,6 @@ class CreateNotesFragment : Fragment() {
         // Navigate back to the home fragment
         Navigation.findNavController(it!!).navigate(R.id.action_createNotesFragment2_to_homeFragment22)
     }
+
 
 }

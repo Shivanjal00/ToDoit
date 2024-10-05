@@ -14,5 +14,6 @@ data class Notes( // Change `class` to `data class`
     var subTitle: String,
     var notes: String,
     var date: String,
+    var time: String, // Add a new field for time
     var priority: String
 ) : Parcelable // Implement Parcelable
