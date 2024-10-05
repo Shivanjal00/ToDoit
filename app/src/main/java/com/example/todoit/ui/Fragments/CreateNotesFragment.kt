@@ -216,7 +216,13 @@ class CreateNotesFragment : Fragment() {
         Toast.makeText(requireContext(), "Notes saved successfully", Toast.LENGTH_SHORT).show()
 
         // Navigate back to the home fragment
-        Navigation.findNavController(it!!).navigate(R.id.action_createNotesFragment2_to_homeFragment22)
+        val navOptions = androidx.navigation.NavOptions.Builder()
+            .setPopUpTo(R.id.homeFragment2, true) // Pop up to HomeFragment, clearing the back stack
+            .build()
+
+        // Navigate to the HomeFragment and clear the back stack
+        Navigation.findNavController(it!!).navigate(R.id.action_createNotesFragment2_to_homeFragment22, null, navOptions)
+
     }
 
 

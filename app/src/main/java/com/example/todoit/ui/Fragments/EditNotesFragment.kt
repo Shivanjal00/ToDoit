@@ -207,7 +207,14 @@ class EditNotesFragment : Fragment() {
 
         Toast.makeText(requireContext(), "Notes updated successfully", Toast.LENGTH_SHORT).show()
 
-        Navigation.findNavController(view).navigate(R.id.action_editNotesFragment2_to_homeFragment22)
+        val navOptions = androidx.navigation.NavOptions.Builder()
+            .setPopUpTo(R.id.editNotesFragment2, true) // Pop up to HomeFragment, clearing the back stack
+            .build()
+
+// Navigate to the HomeFragment and clear the back stack
+        Navigation.findNavController(view).navigate(R.id.action_editNotesFragment2_to_homeFragment22, null, navOptions)
+
+
     }
 
     private fun showDeleteDialog() {
