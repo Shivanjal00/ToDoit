@@ -129,13 +129,17 @@ class CreateNotesFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun scheduleNotification(title: String, description: String, timeInMillis: Long) {
+        // Adjust the calendar to set seconds to zero
+        calendar.set(Calendar.SECOND, 0)
+
+        val adjustedTimeInMillis = calendar.timeInMillis // Use the adjusted calendar
+
         try {
             val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
             // Check if the app can schedule exact alarms
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (!alarmManager.canScheduleExactAlarms()) {
-                    // Inform the user to allow the permission manually
                     showExactAlarmPermissionDialog()
                     return
                 }
@@ -150,11 +154,13 @@ class CreateNotesFragment : Fragment() {
                 requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+            // Schedule the alarm
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, adjustedTimeInMillis, pendingIntent)
         } catch (e: SecurityException) {
             Toast.makeText(requireContext(), "Permission required to set exact alarms", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun showExactAlarmPermissionDialog() {
         AlertDialog.Builder(requireContext())
@@ -177,6 +183,10 @@ class CreateNotesFragment : Fragment() {
         val subTitle = binding.editSubtitle.text.toString()
         val notes = binding.editNotes.text.toString()
 
+        // Set seconds to zero for the calendar instance
+        calendar.set(Calendar.SECOND, 0)
+
+        // Get the time in milliseconds with seconds set to zero
         val taskTimeInMillis = calendar.timeInMillis
 
         // Schedule the notification for the selected time
@@ -185,17 +195,24 @@ class CreateNotesFragment : Fragment() {
         val d = Date()
         val notesDate: CharSequence = DateFormat.format("MMMM d, yyyy", d.time)
 
+        // Create the Notes object with the new 'time' field
         val data = Notes(
             null,
             title = title,
             subTitle = subTitle,
             notes = notes,
             date = notesDate.toString(),
-            priority
+            priority = priority,
         )
+
+        // Add notes to the ViewModel
         viewModel.addNotes(data)
+
+        // Show a success message
         Toast.makeText(requireContext(), "Notes saved successfully", Toast.LENGTH_SHORT).show()
 
+        // Navigate back to the home fragment
         Navigation.findNavController(it!!).navigate(R.id.action_createNotesFragment2_to_homeFragment22)
     }
+
 }

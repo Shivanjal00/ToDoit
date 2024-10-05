@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.0"
+agp = "8.5.2"
 firebaseBom = "33.4.0"
 firebaseMessaging = "24.0.2"
 gradle = "7.0.4"
@@ -23,6 +23,7 @@ roomKtx = "2.3.0"
 roomRuntime = "2.6.1"
 roomRuntimeVersion = "2.3.0"
 googleGmsGoogleServices = "4.4.2"
+firebaseMessagingKtx = "24.0.2"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -55,6 +56,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntimeVersion" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

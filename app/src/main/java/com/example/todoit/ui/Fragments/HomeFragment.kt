@@ -58,49 +58,44 @@ class HomeFragment : Fragment() {
 
         // RecyclerView and ViewModel setup
         viewModel.getNotes().observe(viewLifecycleOwner) { notesList ->
-            binding.rcvAllNotes.layoutManager = GridLayoutManager(requireContext(), 2)
-            oldMyNotes = notesList as ArrayList<Notes>
-            adapter = NotesAdapter(requireContext(), notesList)
-            binding.rcvAllNotes.adapter = adapter
+            if (notesList.isNullOrEmpty()) {
+                binding.rcvAllNotes.visibility = View.GONE
+                binding.tvNoNotes.visibility = View.VISIBLE
+            } else {
+                binding.rcvAllNotes.visibility = View.VISIBLE
+                binding.tvNoNotes.visibility = View.GONE
+                binding.rcvAllNotes.layoutManager = GridLayoutManager(requireContext(), 2)
+                oldMyNotes = notesList as ArrayList<Notes>
+                adapter = NotesAdapter(requireContext(), notesList)
+                binding.rcvAllNotes.adapter = adapter
+            }
         }
 
         // Filter all notes
         binding.filterAll.setOnClickListener {
             viewModel.getNotes().observe(viewLifecycleOwner) { notesList ->
-                binding.rcvAllNotes.layoutManager = GridLayoutManager(requireContext(), 2)
-                oldMyNotes = notesList as ArrayList<Notes>
-                adapter = NotesAdapter(requireContext(), notesList)
-                binding.rcvAllNotes.adapter = adapter
+                handleNoteDisplay(notesList)
             }
         }
 
         // Filter high priority notes
         binding.filterHigh.setOnClickListener {
             viewModel.getHighNotes().observe(viewLifecycleOwner) { notesList ->
-                binding.rcvAllNotes.layoutManager = GridLayoutManager(requireContext(), 2)
-                oldMyNotes = notesList as ArrayList<Notes>
-                adapter = NotesAdapter(requireContext(), notesList)
-                binding.rcvAllNotes.adapter = adapter
+                handleNoteDisplay(notesList)
             }
         }
 
         // Filter medium priority notes
         binding.filterMedium.setOnClickListener {
             viewModel.getMediumNotes().observe(viewLifecycleOwner) { notesList ->
-                binding.rcvAllNotes.layoutManager = GridLayoutManager(requireContext(), 2)
-                oldMyNotes = notesList as ArrayList<Notes>
-                adapter = NotesAdapter(requireContext(), notesList)
-                binding.rcvAllNotes.adapter = adapter
+                handleNoteDisplay(notesList)
             }
         }
 
         // Filter low priority notes
         binding.filterLow.setOnClickListener {
             viewModel.getLowNotes().observe(viewLifecycleOwner) { notesList ->
-                binding.rcvAllNotes.layoutManager = GridLayoutManager(requireContext(), 2)
-                oldMyNotes = notesList as ArrayList<Notes>
-                adapter = NotesAdapter(requireContext(), notesList)
-                binding.rcvAllNotes.adapter = adapter
+                handleNoteDisplay(notesList)
             }
         }
 
@@ -125,4 +120,19 @@ class HomeFragment : Fragment() {
         }
         adapter.filtering(newFilteredList)
     }
+
+    // Handle the visibility of RecyclerView and No Data TextView
+    private fun handleNoteDisplay(notesList: List<Notes>) {
+        if (notesList.isNullOrEmpty()) {
+            binding.rcvAllNotes.visibility = View.GONE
+            binding.tvNoNotes.visibility = View.VISIBLE
+        } else {
+            binding.rcvAllNotes.visibility = View.VISIBLE
+            binding.tvNoNotes.visibility = View.GONE
+            oldMyNotes = notesList as ArrayList<Notes>
+            adapter = NotesAdapter(requireContext(), notesList)
+            binding.rcvAllNotes.adapter = adapter
+        }
+    }
 }
+
