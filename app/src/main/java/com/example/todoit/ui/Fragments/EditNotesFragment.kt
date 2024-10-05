@@ -1,23 +1,37 @@
 package com.example.todoit.ui.Fragments
 
+import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.view.*
-import android.widget.TextView
-import android.widget.Toast
+import android.provider.Settings
+import android.text.format.DateFormat
 import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import com.example.todoit.Model.Notes
 import com.example.todoit.R
+import com.example.todoit.TaskReminderReceiver
 import com.example.todoit.ViewModel.NotesViewModel
 import com.example.todoit.databinding.FragmentEditNotesBinding
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.*
 
 class EditNotesFragment : Fragment() {
@@ -25,13 +39,16 @@ class EditNotesFragment : Fragment() {
     val oldNotes by navArgs<EditNotesFragmentArgs>()
     lateinit var binding: FragmentEditNotesBinding
     var priority: String = "1"
-    val viewModel: NotesViewModel by viewModels()
 
+    val viewModel: NotesViewModel by viewModels()
+    private var calendar = Calendar.getInstance() // To store selected date and time
+
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+
         binding = FragmentEditNotesBinding.inflate(layoutInflater, container, false)
 
         // Set up menu using MenuHost API
@@ -108,82 +125,101 @@ class EditNotesFragment : Fragment() {
     }
 
     private fun openDatePicker() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"  // Format: DD/MM/YYYY
-            binding.edtDate.setText(date)
-        }, year, month, day)
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, monthOfYear, dayOfMonth ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, monthOfYear)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
+                // Format the selected date and set it to the EditText
+                val selectedDate = String.format("%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year)
+                binding.edtDate.setText(selectedDate)
+            },
+            currentYear,
+            currentMonth,
+            currentDay
+        )
         datePickerDialog.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun openTimePicker() {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
         val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
-            val time = String.format("%02d:%02d", selectedHour, selectedMinute) // Format: HH:mm
+            val time = String.format("%02d:%02d", selectedHour, selectedMinute) // Format the selected time
             binding.edtTime.setText(time)
-        }, hour, minute, true)
 
+            // Set the selected time to the calendar object
+            calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
+            calendar.set(Calendar.MINUTE, selectedMinute)
+            calendar.set(Calendar.SECOND, 0) // Set the seconds to zero
+
+            // Set the alarm
+            setAlarm(calendar.timeInMillis)
+        }, hour, minute, DateFormat.is24HourFormat(requireContext()))
         timePickerDialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun setAlarm(timeInMillis: Long) {
+        // Create an intent for the alarm
+        val intent = Intent(requireContext(), TaskReminderReceiver::class.java)
+
+        // Create a pending intent
+        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_MUTABLE)
+
+        // Create an alarm manager
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Set the alarm
+        if (alarmManager.canScheduleExactAlarms()) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+        } else {
+            // Request the permission
+            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+            startActivity(intent)
+        }
     }
 
     private fun updateNotes(view: View) {
         val title = binding.edtTitle.text.toString()
         val subTitle = binding.edtSubtitle.text.toString()
         val notes = binding.edtNotes.text.toString()
-        val date = binding.edtDate.text.toString() // Get the date from the EditText
-        val time = binding.edtTime.text.toString() // Get the time from the EditText
+        val date = binding.edtDate.text.toString()
+        val time = binding.edtTime.text.toString()
 
-        // Create updated note object
-        val updatedNote = Notes(
-            oldNotes.data.id,
-            title = title,
-            subTitle = subTitle,
-            notes = notes,
-            date = date, // Save the date
-            time = time, // Save the time
-            priority
-        )
+        /*val calendar = Calendar.getInstance()
+        val timeParts = time.split(":")
+        calendar.set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
+        calendar.set(Calendar.MINUTE, timeParts[1].toInt())
+        calendar.set(Calendar.SECOND, 0) // Set the seconds to zero*/
 
-        viewModel.updateNotes(updatedNote)
-        Toast.makeText(requireContext(), "Notes Updated Successfully", Toast.LENGTH_SHORT).show()
+        val updatedNotes = Notes(oldNotes.data.id, title, subTitle, notes, date, time, priority)
+        viewModel.updateNotes(updatedNotes)
 
-        // Navigate back to HomeFragment
+        Toast.makeText(requireContext(), "Notes updated successfully", Toast.LENGTH_SHORT).show()
+
         Navigation.findNavController(view).navigate(R.id.action_editNotesFragment2_to_homeFragment22)
     }
 
-    // Function to show the delete confirmation dialog
     private fun showDeleteDialog() {
-        val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetStyle)
-        bottomSheet.setContentView(R.layout.dialog_delete)
-
-        val textViewYes = bottomSheet.findViewById<TextView>(R.id.dialog_yes)
-        val textViewNo = bottomSheet.findViewById<TextView>(R.id.dialog_no)
-
-        // If "Yes" is clicked, delete the note and navigate back to HomeFragment
-        textViewYes?.setOnClickListener {
-            viewModel.deleteNotes(oldNotes.data.id!!)
-            bottomSheet.dismiss()
-
-            // Navigate to HomeFragment after deletion
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_editNotesFragment2_to_homeFragment22)
-
-            Toast.makeText(requireContext(), "Note Deleted", Toast.LENGTH_SHORT).show()
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Delete Note")
+        builder.setMessage("Are you sure you want to delete this note?")
+        builder.setPositiveButton("Yes") { _, _ ->
+            oldNotes.data.id?.let { viewModel.deleteNotes(it) }
+            Toast.makeText(requireContext(), "Note deleted successfully", Toast.LENGTH_SHORT).show()
+            Navigation.findNavController(requireView()).navigate(R.id.action_editNotesFragment2_to_homeFragment22)
         }
-
-        // If "No" is clicked, dismiss the dialog
-        textViewNo?.setOnClickListener {
-            bottomSheet.dismiss()
-        }
-
-        bottomSheet.show()
+        builder.setNegativeButton("No") { _, _ -> }
+        builder.show()
     }
 }
