@@ -25,6 +25,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.todoit.Model.Notes
@@ -211,7 +212,7 @@ class EditNotesFragment : Fragment() {
             .setPopUpTo(R.id.editNotesFragment2, true) // Pop up to HomeFragment, clearing the back stack
             .build()
 
-// Navigate to the HomeFragment and clear the back stack
+        // Navigate to the HomeFragment and clear the back stack
         Navigation.findNavController(view).navigate(R.id.action_editNotesFragment2_to_homeFragment22, null, navOptions)
 
 
@@ -224,9 +225,16 @@ class EditNotesFragment : Fragment() {
         builder.setPositiveButton("Yes") { _, _ ->
             oldNotes.data.id?.let { viewModel.deleteNotes(it) }
             Toast.makeText(requireContext(), "Note deleted successfully", Toast.LENGTH_SHORT).show()
-            Navigation.findNavController(requireView()).navigate(R.id.action_editNotesFragment2_to_homeFragment22)
+
+            // Navigate to the home fragment and clear the back stack
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(R.id.editNotesFragment2, true)  // Clear EditNotesFragment from the back stack
+                .build()
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_editNotesFragment2_to_homeFragment22, null, navOptions)
         }
         builder.setNegativeButton("No") { _, _ -> }
         builder.show()
     }
+
 }
