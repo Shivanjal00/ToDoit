@@ -12,6 +12,10 @@ import androidx.core.app.NotificationCompat
 
 class TaskReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+
+        val taskTitle = intent?.getStringExtra("taskTitle")
+        val taskDescription = intent?.getStringExtra("taskDescription")
+        
         // Create a notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_HIGH)
@@ -23,8 +27,8 @@ class TaskReminderReceiver : BroadcastReceiver() {
         val builder = NotificationCompat.Builder(context, "channel_id")
         builder.setSmallIcon(R.drawable.log)
         builder.setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.log))
-        builder.setContentTitle("Task Reminder")
-        builder.setContentText("You have a task reminder")
+        builder.setContentTitle(taskTitle)
+        builder.setContentText(taskDescription)
         builder.setPriority(NotificationCompat.PRIORITY_HIGH)
 
         // Create a notification manager
