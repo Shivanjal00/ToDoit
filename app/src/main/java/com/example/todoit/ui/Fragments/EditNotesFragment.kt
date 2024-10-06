@@ -40,6 +40,8 @@ class EditNotesFragment : Fragment() {
     val oldNotes by navArgs<EditNotesFragmentArgs>()
     lateinit var binding: FragmentEditNotesBinding
     var priority: String = "1"
+    lateinit var titleNotes: String
+    lateinit var subTitleNotes: String
 
     val viewModel: NotesViewModel by viewModels()
     private var calendar = Calendar.getInstance() // To store selected date and time
@@ -76,6 +78,9 @@ class EditNotesFragment : Fragment() {
         binding.edtNotes.setText(oldNotes.data.notes)
         binding.edtDate.setText(oldNotes.data.date)  // Populate the date field
         binding.edtTime.setText(oldNotes.data.time)  // Populate the time field
+
+        titleNotes = oldNotes.data.title
+        subTitleNotes = oldNotes.data.subTitle
 
         // Set priority according to the existing data
         when (oldNotes.data.priority) {
@@ -172,7 +177,11 @@ class EditNotesFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     private fun setAlarm(timeInMillis: Long) {
         // Create an intent for the alarm
-        val intent = Intent(requireContext(), TaskReminderReceiver::class.java)
+        val intent = Intent(requireContext(), TaskReminderReceiver::class.java).apply {
+            putExtra("taskTitle", titleNotes)
+            putExtra("taskDescription", subTitleNotes)
+        }
+
 
         // Create a pending intent
         val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_MUTABLE)
@@ -197,6 +206,9 @@ class EditNotesFragment : Fragment() {
         val date = binding.edtDate.text.toString()
         val time = binding.edtTime.text.toString()
 
+        titleNotes = title
+        subTitleNotes = subTitle
+
         /*val calendar = Calendar.getInstance()
         val timeParts = time.split(":")
         calendar.set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
@@ -208,7 +220,7 @@ class EditNotesFragment : Fragment() {
 
         Toast.makeText(requireContext(), "Notes updated successfully", Toast.LENGTH_SHORT).show()
 
-        val navOptions = androidx.navigation.NavOptions.Builder()
+        val navOptions = NavOptions.Builder()
             .setPopUpTo(R.id.editNotesFragment2, true) // Pop up to HomeFragment, clearing the back stack
             .build()
 
