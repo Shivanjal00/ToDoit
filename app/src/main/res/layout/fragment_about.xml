@@ -5,10 +5,33 @@
     android:layout_height="match_parent"
     tools:context=".ui.Fragments.AboutFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:padding="16dp">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- TextView for Privacy Policy -->
+            <TextView
+                android:id="@+id/textPrivacyPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingBottom="16dp"
+                android:text="Privacy Policy will be displayed here..." />
+
+            <!-- TextView for Terms and Conditions -->
+            <TextView
+                android:id="@+id/textTermsConditions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="Terms and Conditions will be displayed here..." />
+        </LinearLayout>
+
+    </ScrollView>
 </FrameLayout>
