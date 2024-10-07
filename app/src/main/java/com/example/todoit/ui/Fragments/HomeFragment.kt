@@ -52,7 +52,13 @@ class HomeFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return false
+                return when (menuItem.itemId) {
+                    R.id.about -> {
+                        Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment2_to_aboutFragment)
+                        true
+                    }
+                    else -> false
+                }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 

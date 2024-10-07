@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_homeFragment2_to_editNotesFragment2"
             app:destination="@id/editNotesFragment2" />
+        <action
+            android:id="@+id/action_homeFragment2_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/createNotesFragment2"
@@ -36,5 +39,14 @@
         <argument
             android:name="data"
             app:argType="com.example.todoit.Model.Notes" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.todoit.ui.Fragments.AboutFragment"
+        android:label="About Us"
+        tools:layout="@layout/fragment_about" >
+        <action
+            android:id="@+id/action_aboutFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
     </fragment>
 </navigation>
